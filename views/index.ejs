@@ -3,10 +3,54 @@
   <head>
     <title>Intuit Dashboard</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link href="/scripts/video.js/dist/video-js.min.css" rel="stylesheet">
+    <link href="/dist/css/videojs.record.css" rel="stylesheet">
+    <script src="/scripts/video.js/dist/video.min.js"></script>
+    <script src="/scripts/recordrtc/RecordRTC.js"></script>
+    <script src="/scripts/webrtc-adapter/out/adapter.js"></script>
+    <script src="/dist/videojs.record.js"></script>
   </head>
 
   <body>
     <div class="container">
+      <video id="userCameraCapture" class="video-js vjs-default-skin"></video>
     </div>
+
+    <script>
+      var options = {
+          controls: true,
+          width: 520,
+          height: 420,
+          fluid: false,
+          plugins: {
+              record: {
+                  audio: true,
+                  video: true,
+                  maxLength: 10,
+                  debug: true
+              }
+          }
+      };
+      var player = videojs('userCameraCapture', options, function() {
+          var msg = 'Using video.js ' + videojs.VERSION +
+              ' with videojs-record ' + videojs.getPluginVersion('record') +
+              ' and recordrtc ' + RecordRTC.version;
+          videojs.log(msg);
+      });
+      player.on('deviceError', function() {
+          console.log(player.deviceErrorCode);
+      });
+      player.on('error', function(error) {
+          console.log('error);
+      });
+      player.on('startRecord', function() {
+          console.log('recording');
+      });
+      // recording complete; stream available
+      player.on('finishRecord', function() {
+          // blob obj that contains the recorded data that can be stored on server
+          console.log('finished recording: ', player.recordedData);
+      });
+    </script>
   </body>
 </html>

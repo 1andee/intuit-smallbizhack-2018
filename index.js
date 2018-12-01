@@ -12,13 +12,14 @@ const knexLogger = require('knex-logger');
 
 app.set("view engine", "ejs");
 app.use(express.static("public"));
+app.use('/scripts', express.static(__dirname + '/node_modules/'));
 app.use(cors());
 app.use(morgan('dev'));
 app.use(knexLogger(knex));
 app.use(bodyParser.json())
 
 app.get("/", (req, res) => {
-  res.render("index", data);
+  res.render("index");
 });
 
 const customerApi = require('./api/customer');
