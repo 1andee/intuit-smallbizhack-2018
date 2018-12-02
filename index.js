@@ -1,4 +1,5 @@
-"use strict";
+'use strict';
+require('dotenv').config();
 const PORT = process.env.PORT || 8080;
 const ENV = process.env.NODE_ENV || 'development';
 const express = require("express");
@@ -23,7 +24,9 @@ app.get("/", (req, res) => {
 });
 
 const customerApi = require('./api/customer');
+const fileApi = require('./api/file');
 app.use('/api/customer', customerApi(knex));
+app.use('/api/file', fileApi(knex));
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
